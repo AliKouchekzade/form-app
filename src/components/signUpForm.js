@@ -1,18 +1,27 @@
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignUpForm = () => {
   const formik = useFormik({
-    initialValues: { name: "", email: "", pass: "" },
+    initialValues: { name: "", email: "", pass: "", repass: "" },
     onSubmit: (values) => {
       console.log(values);
     },
-    validate: (values) => {
-      let errors = {};
-      if (!values.name) errors.name = "name is required!";
-      if (!values.email) errors.email = "email is required!";
-      if (!values.pass) errors.pass = "password is required!";
-      return errors;
-    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("name is required"),
+      email: Yup.string()
+        .email("invalid email format")
+        .required("email is required"),
+      pass: Yup.string()
+        .min(8, "at least 8 characters")
+        .matches(/[a-z]/, "at least one lowercase char")
+        .matches(/[A-Z]/, "at least one uppercase char")
+        .matches(/[a-zA-Z]+[^a-zA-Z\s]+/, "at least 1 number or special char")
+        .required("password is required"),
+      repass: Yup.string()
+        .oneOf([Yup.ref("pass"), null], "passwords must match")
+        .required("password confirm is required"),
+    }),
   });
 
   return (
@@ -22,16 +31,14 @@ const SignUpForm = () => {
     >
       <h2 className="text-4xl">SignForm</h2>
       <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <label className="basis-1/4">Name</label>
           <input
             className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
             placeholder="name"
             type="text"
-            value={formik.values.name}
             name="name"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            {...formik.getFieldProps("name")}
           />
         </div>
         {
@@ -45,16 +52,17 @@ const SignUpForm = () => {
         }
       </div>
       <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <label className="basis-1/4">Email</label>
           <input
             className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
             placeholder="Email"
             type="email"
-            value={formik.values.email}
             name="email"
+            /*value={formik.values.email}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            onBlur={formik.handleBlur}*/
+            {...formik.getFieldProps("email")}
           />
         </div>
         {
@@ -68,16 +76,14 @@ const SignUpForm = () => {
         }
       </div>
       <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <label className="basis-1/4">password</label>
           <input
             className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
             placeholder="password"
             type="password"
-            value={formik.values.pass}
             name="pass"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            {...formik.getFieldProps("pass")}
           />
         </div>
         {
@@ -87,6 +93,27 @@ const SignUpForm = () => {
             }`}
           >
             {formik.errors.pass}
+          </div>
+        }
+      </div>
+      <div className="flex flex-col gap-y-1">
+        <div className="flex justify-between items-center">
+          <label className="basis-1/4">re pass</label>
+          <input
+            className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
+            placeholder="repeat password"
+            type="password"
+            name="repass"
+            {...formik.getFieldProps("repass")}
+          />
+        </div>
+        {
+          <div
+            className={`text-red-600 text-sm h-1.5 ${
+              formik.errors.repass && formik.touched.repass ? "" : "opacity-0"
+            }`}
+          >
+            {formik.errors.repass}
           </div>
         }
       </div>
