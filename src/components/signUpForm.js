@@ -2,6 +2,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const SignUpForm = () => {
+  const inputStyle =
+    "basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400";
+
   const formik = useFormik({
     initialValues: { name: "", email: "", pass: "", repass: "" },
     onSubmit: (values) => {
@@ -22,6 +25,7 @@ const SignUpForm = () => {
         .oneOf([Yup.ref("pass"), null], "passwords must match")
         .required("password confirm is required"),
     }),
+    validateOnMount:true
   });
 
   return (
@@ -34,7 +38,7 @@ const SignUpForm = () => {
         <div className="flex justify-between items-center">
           <label className="basis-1/4">Name</label>
           <input
-            className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
+            className={inputStyle}
             placeholder="name"
             type="text"
             name="name"
@@ -55,7 +59,7 @@ const SignUpForm = () => {
         <div className="flex justify-between items-center">
           <label className="basis-1/4">Email</label>
           <input
-            className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
+            className={inputStyle}
             placeholder="Email"
             type="email"
             name="email"
@@ -79,7 +83,7 @@ const SignUpForm = () => {
         <div className="flex justify-between items-center">
           <label className="basis-1/4">password</label>
           <input
-            className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
+            className={inputStyle}
             placeholder="password"
             type="password"
             name="pass"
@@ -100,7 +104,7 @@ const SignUpForm = () => {
         <div className="flex justify-between items-center">
           <label className="basis-1/4">re pass</label>
           <input
-            className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
+            className={inputStyle}
             placeholder="repeat password"
             type="password"
             name="repass"
@@ -119,7 +123,12 @@ const SignUpForm = () => {
       </div>
       <button
         type="submit"
-        className="bg-yellow-400 py-2 rounded-xl text-white text-xl"
+        className={`py-2 rounded-xl text-white text-xl ${
+          formik.isValid
+            ? "bg-yellow-400 cursor-pointer"
+            : "bg-yellow-200 cursor-not-allowed"
+        }`}
+        disabled={!formik.isValid}
       >
         submit
       </button>
