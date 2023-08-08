@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Input from "../common/input";
 import RadioInput from "../common/radioInput";
+import Select from "../common/select";
 
 const SignUpForm = () => {
   const inputs = [
@@ -13,6 +14,13 @@ const SignUpForm = () => {
 
   const inputsRadio = [{ value: "male", def: true }, { value: "female" }];
 
+  const selectOptions = [
+    { label: "select...", value: "" },
+    { label: "yesterday", value: "yesterday" },
+    { label: "today", value: "today" },
+    { label: "tomorrow", value: "tomorrow" },
+  ];
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -20,6 +28,7 @@ const SignUpForm = () => {
       password: "",
       repass: "",
       gender: "male",
+      time: "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -39,6 +48,7 @@ const SignUpForm = () => {
         .oneOf([Yup.ref("password"), null], "passwords must match")
         .required("password confirm is required"),
       gender: Yup.string().required("gender is required"),
+      time: Yup.string().required("time is required"),
     }),
     validateOnMount: true,
   });
@@ -46,9 +56,10 @@ const SignUpForm = () => {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="bg-yellow-100 w-96 m-auto mt-10 flex flex-col gap-y-9 p-5 rounded-lg"
+      className="bg-yellow-100 m-auto mt-5 flex flex-col gap-y-8 p-5 rounded-lg"
+      style={{ width: "500px" }}
     >
-      <h2 className="text-4xl">SignForm</h2>
+      <h2 className="text-4xl">Sign Up</h2>
 
       {inputs.map((input, index) => (
         <Input
@@ -58,6 +69,8 @@ const SignUpForm = () => {
           inputType={input.inputType}
         />
       ))}
+
+      <Select formik={formik} name={"time"} selectOptions={selectOptions} />
 
       <RadioInput formik={formik} name="gender" inputsRadio={inputsRadio} />
 
