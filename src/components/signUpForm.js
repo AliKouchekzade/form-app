@@ -11,6 +11,8 @@ const SignUpForm = () => {
     { type: "repass", inputType: "password" },
   ];
 
+  const inputsRadio = [{ value: "male", def: true }, { value: "female" }];
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -57,7 +59,7 @@ const SignUpForm = () => {
         />
       ))}
 
-      <RadioInput formik={formik} name="gender" />
+      <RadioInput formik={formik} name="gender" inputsRadio={inputsRadio} />
 
       <button
         type="submit"

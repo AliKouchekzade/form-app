@@ -1,6 +1,4 @@
-const RadioInput = ({ formik, name }) => {
-  const inputsRadio = [{ value: "male", def: true }, { value: "female" }];
-
+const RadioInput = ({ formik, name, inputsRadio }) => {
   return (
     <div className="flex gap-x-6">
       {inputsRadio.map((input, index) => (
