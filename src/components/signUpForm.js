@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Input from "../common/input";
+import RadioInput from "../common/radioInput";
 
 const SignUpForm = () => {
   const inputs = [
@@ -56,29 +57,8 @@ const SignUpForm = () => {
         />
       ))}
 
-      <div className="flex gap-x-6">
-        <div className="flex items-center gap-x-1">
-          <input
-            type="radio"
-            name="gender"
-            id="male"
-            value="male"
-            onChange={formik.handleChange}
-            defaultChecked
-          />
-          <label htmlFor="male">Male</label>
-        </div>
-        <div className="flex items-center gap-x-1">
-          <input
-            type="radio"
-            name="gender"
-            id="female"
-            value="female"
-            onChange={formik.handleChange}
-          />
-          <label htmlFor="female">Female</label>
-        </div>
-      </div>
+      <RadioInput formik={formik} name="gender" />
+
       <button
         type="submit"
         className={`py-2 rounded-xl text-white text-xl ${

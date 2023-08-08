@@ -1,13 +1,13 @@
 const Input = ({ formik, type, inputType }) => {
-  const inputStyle =
-    "basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400";
-
   return (
     <div className="flex flex-col gap-y-1">
       <div className="flex justify-between items-center">
-        <label className="basis-1/4">{type}</label>
+        <label htmlFor={type} className="basis-1/4">
+          {type}
+        </label>
         <input
-          className={inputStyle}
+          id={type}
+          className="basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400"
           placeholder={type}
           type={inputType}
           name={type}
