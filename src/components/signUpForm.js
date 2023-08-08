@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import Input from "../common/input";
 import RadioInput from "../common/radioInput";
 import Select from "../common/select";
+import CheckBox from "../common/checkbox";
 
 const SignUpForm = () => {
   const inputs = [
@@ -21,6 +22,12 @@ const SignUpForm = () => {
     { label: "tomorrow", value: "tomorrow" },
   ];
 
+  const checkBoxs = [
+    { value: "react" },
+    { value: "vue" },
+    { value: "angular" },
+  ];
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -29,6 +36,7 @@ const SignUpForm = () => {
       repass: "",
       gender: "male",
       time: "",
+      interests: [],
     },
     onSubmit: (values) => {
       console.log(values);
@@ -49,6 +57,7 @@ const SignUpForm = () => {
         .required("password confirm is required"),
       gender: Yup.string().required("gender is required"),
       time: Yup.string().required("time is required"),
+      interests: Yup.array().min(2).required("choose at least one interest"),
     }),
     validateOnMount: true,
   });
@@ -73,6 +82,8 @@ const SignUpForm = () => {
       <Select formik={formik} name={"time"} selectOptions={selectOptions} />
 
       <RadioInput formik={formik} name="gender" inputsRadio={inputsRadio} />
+
+      <CheckBox formik={formik} name="interests" checkBoxs={checkBoxs} />
 
       <button
         type="submit"
