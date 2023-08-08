@@ -1,12 +1,23 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Input from "../common/input";
 
 const SignUpForm = () => {
-  const inputStyle =
-    "basis-3/4 w-full rounded-lg px-4 py-1.5 outline-yellow-400";
+  const inputs = [
+    { type: "name", inputType: "text" },
+    { type: "email", inputType: "email" },
+    { type: "password", inputType: "password" },
+    { type: "repass", inputType: "password" },
+  ];
 
   const formik = useFormik({
-    initialValues: { name: "", email: "", pass: "", repass: "" },
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      repass: "",
+      gender: "male",
+    },
     onSubmit: (values) => {
       console.log(values);
     },
@@ -15,17 +26,18 @@ const SignUpForm = () => {
       email: Yup.string()
         .email("invalid email format")
         .required("email is required"),
-      pass: Yup.string()
+      password: Yup.string()
         .min(8, "at least 8 characters")
         .matches(/[a-z]/, "at least one lowercase char")
         .matches(/[A-Z]/, "at least one uppercase char")
         .matches(/[a-zA-Z]+[^a-zA-Z\s]+/, "at least 1 number or special char")
         .required("password is required"),
       repass: Yup.string()
-        .oneOf([Yup.ref("pass"), null], "passwords must match")
+        .oneOf([Yup.ref("password"), null], "passwords must match")
         .required("password confirm is required"),
+      gender: Yup.string().required("gender is required"),
     }),
-    validateOnMount:true
+    validateOnMount: true,
   });
 
   return (
@@ -34,92 +46,38 @@ const SignUpForm = () => {
       className="bg-yellow-100 w-96 m-auto mt-10 flex flex-col gap-y-9 p-5 rounded-lg"
     >
       <h2 className="text-4xl">SignForm</h2>
-      <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between items-center">
-          <label className="basis-1/4">Name</label>
+
+      {inputs.map((input, index) => (
+        <Input
+          key={index}
+          formik={formik}
+          type={input.type}
+          inputType={input.inputType}
+        />
+      ))}
+
+      <div className="flex gap-x-6">
+        <div className="flex items-center gap-x-1">
           <input
-            className={inputStyle}
-            placeholder="name"
-            type="text"
-            name="name"
-            {...formik.getFieldProps("name")}
-          />
-        </div>
-        {
-          <div
-            className={`text-red-600 text-sm h-1.5 ${
-              formik.errors.name && formik.touched.name ? "" : "opacity-0"
-            }`}
-          >
-            {formik.errors.name}
-          </div>
-        }
-      </div>
-      <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between items-center">
-          <label className="basis-1/4">Email</label>
-          <input
-            className={inputStyle}
-            placeholder="Email"
-            type="email"
-            name="email"
-            /*value={formik.values.email}
+            type="radio"
+            name="gender"
+            id="male"
+            value="male"
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}*/
-            {...formik.getFieldProps("email")}
+            defaultChecked
           />
+          <label htmlFor="male">Male</label>
         </div>
-        {
-          <div
-            className={`text-red-600 text-sm h-1.5 ${
-              formik.errors.email && formik.touched.email ? "" : "opacity-0"
-            }`}
-          >
-            {formik.errors.email}
-          </div>
-        }
-      </div>
-      <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between items-center">
-          <label className="basis-1/4">password</label>
+        <div className="flex items-center gap-x-1">
           <input
-            className={inputStyle}
-            placeholder="password"
-            type="password"
-            name="pass"
-            {...formik.getFieldProps("pass")}
+            type="radio"
+            name="gender"
+            id="female"
+            value="female"
+            onChange={formik.handleChange}
           />
+          <label htmlFor="female">Female</label>
         </div>
-        {
-          <div
-            className={`text-red-600 text-sm h-1.5 ${
-              formik.errors.pass && formik.touched.pass ? "" : "opacity-0"
-            }`}
-          >
-            {formik.errors.pass}
-          </div>
-        }
-      </div>
-      <div className="flex flex-col gap-y-1">
-        <div className="flex justify-between items-center">
-          <label className="basis-1/4">re pass</label>
-          <input
-            className={inputStyle}
-            placeholder="repeat password"
-            type="password"
-            name="repass"
-            {...formik.getFieldProps("repass")}
-          />
-        </div>
-        {
-          <div
-            className={`text-red-600 text-sm h-1.5 ${
-              formik.errors.repass && formik.touched.repass ? "" : "opacity-0"
-            }`}
-          >
-            {formik.errors.repass}
-          </div>
-        }
       </div>
       <button
         type="submit"
